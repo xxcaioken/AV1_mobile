@@ -3,8 +3,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:av1_mobile/main.dart';
 
 void main() {
-  // Garante um viewport alto o suficiente para todos os elementos ficarem
-  // visíveis e clicáveis durante os testes.
   void ajustarTela(WidgetTester tester) {
     tester.view.physicalSize = const Size(430, 1400);
     tester.view.devicePixelRatio = 1.0;

@@ -1,7 +1,3 @@
-// AV1 - Avaliação Prática
-// Unidade Curricular: Desenvolvimento de Sistemas Móveis
-// Tela: Ativação e Ajuste de Limite de Segurança do Cartão Internacional
-
 import 'package:flutter/material.dart';
 
 void main() {
@@ -19,19 +15,16 @@ class TelaAtivacaoCartao extends StatefulWidget {
 }
 
 class _TelaAtivacaoCartaoState extends State<TelaAtivacaoCartao> {
-  // Controladores dos campos de digitação
   final TextEditingController _cvvController = TextEditingController();
   final TextEditingController _limiteController =
       TextEditingController(text: '500');
 
-  // Variáveis de estado da tela
-  bool _cartaoAtivo = false; // controla o texto/cor da etiqueta do cartão
-  bool _cvvOculto = true; // controla a visibilidade dos dígitos do CVV
-  String _moedaSelecionada = 'USD'; // moeda destacada no momento
-  String _mensagemErro = ''; // mensagem de alerta da validação
-  bool _mostrarSucesso = false; // exibe (ou não) o painel de confirmação
+  bool _cartaoAtivo = false;
+  bool _cvvOculto = true;
+  String _moedaSelecionada = 'USD';
+  String _mensagemErro = '';
+  bool _mostrarSucesso = false;
 
-  // Cores utilizadas na tela
   static const Color _corFundo = Color(0xFFF1F5F9);
   static const Color _corEscura = Color(0xFF111C33);
   static const Color _corDestaque = Color(0xFFEF4444);
@@ -46,7 +39,6 @@ class _TelaAtivacaoCartaoState extends State<TelaAtivacaoCartao> {
     super.dispose();
   }
 
-  // Soma R$ 100 ao valor que já está digitado no campo de limite
   void _incrementarLimite() {
     setState(() {
       final int limiteAtual = int.tryParse(_limiteController.text.trim()) ?? 0;
@@ -54,21 +46,18 @@ class _TelaAtivacaoCartaoState extends State<TelaAtivacaoCartao> {
     });
   }
 
-  // Alterna entre mostrar e ocultar os dígitos do código de segurança
   void _alternarVisibilidadeCvv() {
     setState(() {
       _cvvOculto = !_cvvOculto;
     });
   }
 
-  // Troca a moeda destacada
   void _selecionarMoeda(String moeda) {
     setState(() {
       _moedaSelecionada = moeda;
     });
   }
 
-  // Valida os dados e, se estiverem corretos, ativa o cartão
   void _confirmarAtivacao() {
     final String cvv = _cvvController.text.trim();
     final int limite = int.tryParse(_limiteController.text.trim()) ?? 0;
@@ -94,10 +83,7 @@ class _TelaAtivacaoCartaoState extends State<TelaAtivacaoCartao> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: _corFundo,
-      // SafeArea protege a interface contra os recortes físicos do
-      // dispositivo (notch, câmera e barras de sistema).
       body: SafeArea(
-        // SingleChildScrollView evita o overflow quando o teclado é aberto.
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -131,9 +117,7 @@ class _TelaAtivacaoCartaoState extends State<TelaAtivacaoCartao> {
               _construirCampoLimite(),
               const SizedBox(height: 24),
               _construirBotaoConfirmar(),
-              // Feedback visual de erro: só aparece quando há mensagem.
               if (_mensagemErro.isNotEmpty) _construirMensagemErro(),
-              // Painel de sucesso: exibido condicionalmente.
               if (_mostrarSucesso) _construirPainelSucesso(),
               const SizedBox(height: 20),
             ],
@@ -143,7 +127,6 @@ class _TelaAtivacaoCartaoState extends State<TelaAtivacaoCartao> {
     );
   }
 
-  // Cartão de fundo escuro com a etiqueta sobreposta no canto superior
   Widget _construirCartao() {
     return Container(
       width: double.infinity,
@@ -160,14 +143,12 @@ class _TelaAtivacaoCartaoState extends State<TelaAtivacaoCartao> {
           ),
         ],
       ),
-      // Stack permite a sobreposição de elementos em profundidade.
       child: Stack(
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // O espaço à direita é reservado para a etiqueta sobreposta.
               const Padding(
                 padding: EdgeInsets.only(right: 130),
                 child: Text(
@@ -181,8 +162,6 @@ class _TelaAtivacaoCartaoState extends State<TelaAtivacaoCartao> {
                   ),
                 ),
               ),
-              // FittedBox reduz a linha do número em telas mais estreitas,
-              // evitando o estouro horizontal (overflow).
               const FittedBox(
                 fit: BoxFit.scaleDown,
                 alignment: Alignment.centerLeft,
@@ -214,7 +193,6 @@ class _TelaAtivacaoCartaoState extends State<TelaAtivacaoCartao> {
               const SizedBox(height: 4),
             ],
           ),
-          // Etiqueta fixada no canto superior direito do cartão.
           Positioned(
             top: 0,
             right: 0,
@@ -225,7 +203,6 @@ class _TelaAtivacaoCartaoState extends State<TelaAtivacaoCartao> {
     );
   }
 
-  // Etiqueta que muda de texto e de cor conforme o estado de ativação
   Widget _construirEtiquetaStatus() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
@@ -256,7 +233,6 @@ class _TelaAtivacaoCartaoState extends State<TelaAtivacaoCartao> {
     );
   }
 
-  // Rótulo padrão dos campos
   Widget _construirRotulo(String texto) {
     return Text(
       texto,
@@ -269,7 +245,6 @@ class _TelaAtivacaoCartaoState extends State<TelaAtivacaoCartao> {
     );
   }
 
-  // Campo do CVV com o botão de ação rápida dentro do próprio campo
   Widget _construirCampoCvv() {
     return TextField(
       controller: _cvvController,
@@ -296,7 +271,6 @@ class _TelaAtivacaoCartaoState extends State<TelaAtivacaoCartao> {
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: _corEscura, width: 2),
         ),
-        // Ícone interativo que revela ou oculta os dígitos.
         suffixIcon: IconButton(
           onPressed: _alternarVisibilidadeCvv,
           icon: Icon(
@@ -308,7 +282,6 @@ class _TelaAtivacaoCartaoState extends State<TelaAtivacaoCartao> {
     );
   }
 
-  // Três opções de moeda alinhadas horizontalmente e com espaço proporcional
   Widget _construirSeletorDeMoedas() {
     return Row(
       children: [
@@ -321,7 +294,6 @@ class _TelaAtivacaoCartaoState extends State<TelaAtivacaoCartao> {
     );
   }
 
-  // Botão de moeda: apenas o selecionado recebe cor e estilo de destaque
   Widget _construirBotaoMoeda(String moeda, String texto) {
     final bool selecionada = _moedaSelecionada == moeda;
 
@@ -350,7 +322,6 @@ class _TelaAtivacaoCartaoState extends State<TelaAtivacaoCartao> {
     );
   }
 
-  // Campo de limite alinhado horizontalmente com o botão de acréscimo
   Widget _construirCampoLimite() {
     return Row(
       children: [
@@ -404,7 +375,6 @@ class _TelaAtivacaoCartaoState extends State<TelaAtivacaoCartao> {
     );
   }
 
-  // Botão principal, em destaque, que dispara a validação
   Widget _construirBotaoConfirmar() {
     return SizedBox(
       width: double.infinity,
@@ -430,7 +400,6 @@ class _TelaAtivacaoCartaoState extends State<TelaAtivacaoCartao> {
     );
   }
 
-  // Alerta em vermelho exibido quando os dados são inválidos
   Widget _construirMensagemErro() {
     return Container(
       width: double.infinity,
@@ -459,7 +428,6 @@ class _TelaAtivacaoCartaoState extends State<TelaAtivacaoCartao> {
     );
   }
 
-  // Card verde com o resumo da moeda e do limite escolhidos
   Widget _construirPainelSucesso() {
     return Container(
       width: double.infinity,
